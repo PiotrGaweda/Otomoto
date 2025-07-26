@@ -10,7 +10,7 @@ data = []
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 }
-for page in range(1,159):
+for page in range(1,2):
     url = f"https://www.otomoto.pl/osobowe/{brand}/{model}?page={page}"
     response = requests.get(url, headers=headers)
     soup = BeautifulSoup(response.text, "lxml")
@@ -38,15 +38,10 @@ for page in range(1,159):
             year = year_tag.get_text(strip=True)
             print(f"{name} , {price} zł , {mileage} , {fuel} , {gearbox} , {year}")
         
-            data.append({
-                "Nazwa": name,
-                "Cena": price,
-                "Przebieg": mileage,
-                "Paliwo": fuel,
-                "Skrzynia biegów": gearbox,
-                "Rok": year,
+            data.append({ 
+                f"{name},{price},{mileage},{fuel},{gearbox},{year}"
             })
 
 df = pd.DataFrame(data)
-df.to_excel("otomoto_oferty.xlsx", index=False)
+df.to_csv("otomoto_oferty.csv", index=False)
 print("Dane pomyślnie zapisane")
